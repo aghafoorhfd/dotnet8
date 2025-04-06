@@ -27,16 +27,12 @@ jobs:
     - name: Publish the project
       run: dotnet publish --configuration Release --output ./publish
     - name: Deploy to Azure VM using SSH
-      env:
-        AZURE_VM_IP: ${{ secrets.AZURE_VM_IP }}
-        AZURE_VM_USER: ${{ secrets.AZURE_VM_USER }}
-        AZURE_VM_PASSWORD: ${{ secrets.AZURE_VM_PASSWORD }}
       run: |
         # Use sshpass to authenticate with password and deploy using SSH
         # Set up a secure SSH connection and transfer the published files to the VM
 
         # Transfer published files from the GitHub runner to the Azure VM
-        sshpass -p "${{ secrets.AZURE_VM_PASSWORD }}" scp -o StrictHostKeyChecking=no -r ./publish/* $AZURE_VM_USER@${{ secrets.AZURE_VM_IP }}:C:\inetpub\wwwroot\net8test
+        sshpass -p "ABC123ssi$$$" scp -o StrictHostKeyChecking=no -r ./publish/* tdsadmin@20.127.226.1:C:\Users\tdsadmin
 
 
 
