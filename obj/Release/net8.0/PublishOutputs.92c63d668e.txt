@@ -1,0 +1,7 @@
+D:\Projects\UploadFile\UploadFile\obj\Release\net8.0\PubTmp\Out\UploadFile.exe
+D:\Projects\UploadFile\UploadFile\obj\Release\net8.0\PubTmp\Out\appsettings.Development.json
+D:\Projects\UploadFile\UploadFile\obj\Release\net8.0\PubTmp\Out\appsettings.json
+D:\Projects\UploadFile\UploadFile\obj\Release\net8.0\PubTmp\Out\UploadFile.dll
+D:\Projects\UploadFile\UploadFile\obj\Release\net8.0\PubTmp\Out\UploadFile.deps.json
+D:\Projects\UploadFile\UploadFile\obj\Release\net8.0\PubTmp\Out\UploadFile.runtimeconfig.json
+D:\Projects\UploadFile\UploadFile\obj\Release\net8.0\PubTmp\Out\UploadFile.pdb
