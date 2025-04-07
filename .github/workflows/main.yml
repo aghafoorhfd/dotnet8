@@ -39,9 +39,9 @@ jobs:
        $ip = "${{ secrets.AZURE_VM_IP }}"
        $port = "${{ secrets.AZURE_VM_PORT }}"
        $remotePath = "/c/inetpub/wwwroot/myapp/"
-       scp -o StrictHostKeyChecking=no -P $port `
-       -r .\published\* `
-       "$user@$ip:`"$remotePath`""
+       scp -o StrictHostKeyChecking=no -P $port '
+       -r .\published\* '
+       "$user@$ip:'"$remotePath'""
       env:
         SSHPASS: ${{ secrets.AZURE_VM_PASSWORD }}
 
