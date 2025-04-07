@@ -38,17 +38,15 @@ jobs:
     needs: build  # Ensure the build job is completed before deploying
 
     steps:
-      - name: Checkout code from repository
-        uses: actions/checkout@v3
-      - name: copy file via ssh password
-        uses: appleboy/scp-action@v0.1.7
-        with:
-           host: ${{ secrets.AZURE_VM_IP }}
-           username: ${{ secrets.AZURE_VM_USERNAME }}
-           password: ${{ secrets.AZURE_VM_PASSWORD }}
-           port: ${{ secrets.AZURE_VM_PORT }}
-           source: "*"
-           target: \\DynamicResizePO\test
+      - name: Checkout code
+        uses: actions/checkout@v2
 
+      - name: Install sshpass (for password-based authentication)
+        run: sudo apt-get install -y sshpass
 
-
+      - name: Deploy to Azure Windows VM
+        run: |
+          # Use sshpass to pass the password non-interactively for SSH authentication
+          sshpass -p ${{ secrets.AZURE_VM_PASSWORD }} ssh -o StrictHostKeyChecking=no -p 22 tdsadmin@20.127.226.1 "powershell.exe -Command 'C:\\Users\\tdsadmin\\deploy.ps1'"
+        env:
+          AZURE_VM_PASSWORD: ${{ secrets.AZURE_VM_PASSWORD }}
