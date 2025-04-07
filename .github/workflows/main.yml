@@ -34,16 +34,16 @@ jobs:
 
     - name: Copy files to Azure VM using SCP
       run: |
-        scp -o StrictHostKeyChecking=no -P ${{ secrets.AZURE_VM_PORT }} `
-            -r .\published\* `
-            ${{ secrets.AZURE_VM_USERNAME }}@${{ secrets.AZURE_VM_IP }}:C:\inetpub\wwwroot\myapp\
+        scp -o StrictHostKeyChecking=no -P ${{ secrets.AZURE_VM_PORT }} '
+            -r .\published\* '
+            ${{ secrets.AZURE_VM_USERNAME }}@${{ secrets.AZURE_VM_IP }}:"C:\inetpub\wwwroot\myapp\"
       env:
         SSHPASS: ${{ secrets.AZURE_VM_PASSWORD }}
 
     - name: Remote restart IIS (or custom app command)
       run: |
-        ssh -o StrictHostKeyChecking=no -p ${{ secrets.AZURE_VM_PORT }} `
-            ${{ secrets.AZURE_VM_USERNAME }}@${{ secrets.AZURE_VM_IP }} `
+        ssh -o StrictHostKeyChecking=no -p ${{ secrets.AZURE_VM_PORT }} '
+            ${{ secrets.AZURE_VM_USERNAME }}@${{ secrets.AZURE_VM_IP }} '
             "powershell Restart-Service -Name 'W3SVC'"
       env:
         SSHPASS: ${{ secrets.AZURE_VM_PASSWORD }}
