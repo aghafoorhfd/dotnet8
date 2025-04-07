@@ -1,41 +1,49 @@
-name: Deploy .NET 8 App to Azure VM via SSH
+name: Deploy .NET Core 8 App to Azure Windows VM via SSH
 
 on:
   push:
     branches:
-      - main  # Trigger on push to the 'main' branch
+      - main  # Adjust as needed
 
 jobs:
-  build:
-    runs-on: ubuntu-latest  # GitHub runner for the build job
+  build-and-deploy:
+    runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-    - name: Set up .NET SDK
-      uses: actions/setup-dotnet@v3
+    - name: Setup .NET Core 8 SDK
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x'  # Specify the .NET 8 version
+        dotnet-version: '8.0.x'
 
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Build the project
-      run: dotnet build --configuration Release
+    - name: Build project
+      run: dotnet build --configuration Release --no-restore
 
-    - name: Publish the project
-      run: dotnet publish --configuration Release --output ./publish
-    - name: Deploy to Azure VM using SSH
+    - name: Publish project
       run: |
-        # Use sshpass to authenticate with password and deploy using SSH 2
-        # Set up a secure SSH connection and transfer the published files to the VM
+        dotnet publish -c Release -o published
 
-        # Transfer published files from the GitHub runner to the Azure VM
-        sshpass -p "ABC123ssi$$$" scp -o StrictHostKeyChecking=no -r ./publish/* tdsadmin@20.127.226.1:C:\Users\tdsadmin
+    - name: Install SSH client
+      run: |
+        Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
 
+    - name: Copy files to Azure VM using SCP
+      run: |
+        scp -o StrictHostKeyChecking=no -P ${{ secrets.AZURE_VM_PORT }} `
+            -r .\published\* `
+            ${{ secrets.AZURE_VM_USERNAME }}@${{ secrets.AZURE_VM_IP }}:C:\inetpub\wwwroot\myapp\
+      env:
+        SSHPASS: ${{ secrets.AZURE_VM_PASSWORD }}
 
-
-  
-
-     
+    - name: Remote restart IIS (or custom app command)
+      run: |
+        ssh -o StrictHostKeyChecking=no -p ${{ secrets.AZURE_VM_PORT }} `
+            ${{ secrets.AZURE_VM_USERNAME }}@${{ secrets.AZURE_VM_IP }} `
+            "powershell Restart-Service -Name 'W3SVC'"
+      env:
+        SSHPASS: ${{ secrets.AZURE_VM_PASSWORD }}
