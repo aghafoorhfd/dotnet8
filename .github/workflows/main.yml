@@ -28,7 +28,7 @@ jobs:
       run: dotnet publish --configuration Release --output ./publish
     - name: Deploy to Azure VM using SSH
       run: |
-        # Use sshpass to authenticate with password and deploy using SSH
+        # Use sshpass to authenticate with password and deploy using SSH 2
         # Set up a secure SSH connection and transfer the published files to the VM
 
         # Transfer published files from the GitHub runner to the Azure VM
