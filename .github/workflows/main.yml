@@ -33,9 +33,11 @@ jobs:
         Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
 
     - name: Copy files to Azure VM using SCP
+      shell: bash
       run: |
-        scp -o StrictHostKeyChecking=no -P ${{ secrets.AZURE_VM_PORT }} -r .\published\* 
-            ${{ secrets.AZURE_VM_USERNAME }}@${{ secrets.AZURE_VM_IP }}:"C:\inetpub\wwwroot\myapp\"
+       scp -o StrictHostKeyChecking=no -P "${{ secrets.AZURE_VM_PORT }}" \
+       -r published/* \
+       "${{ secrets.AZURE_VM_USERNAME }}@${{ secrets.AZURE_VM_IP }}:/c/inetpub/wwwroot/myapp/"
       env:
         SSHPASS: ${{ secrets.AZURE_VM_PASSWORD }}
 
