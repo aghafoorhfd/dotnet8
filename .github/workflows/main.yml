@@ -32,12 +32,16 @@ jobs:
       run: |
         Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
 
-    - name: Copy files to Azure VM using SCP
-      shell: bash
+    - name: Copy files to Azure VM using SCP (PowerShell)
+      shell: pwsh
       run: |
-       scp -o StrictHostKeyChecking=no -P "${{ secrets.AZURE_VM_PORT }}" \
-       -r published/* \
-       "${{ secrets.AZURE_VM_USERNAME }}@${{ secrets.AZURE_VM_IP }}:/c/inetpub/wwwroot/myapp/"
+       $user = "${{ secrets.AZURE_VM_USERNAME }}"
+       $ip = "${{ secrets.AZURE_VM_IP }}"
+       $port = "${{ secrets.AZURE_VM_PORT }}"
+       $remotePath = "/c/inetpub/wwwroot/myapp/"
+       scp -o StrictHostKeyChecking=no -P $port `
+       -r .\published\* `
+       "$user@$ip:`"$remotePath`""
       env:
         SSHPASS: ${{ secrets.AZURE_VM_PASSWORD }}
 
