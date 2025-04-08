@@ -41,11 +41,11 @@ jobs:
 
       - name: Copy files to Azure VM
         run: |
-          scp -r ./publish/* user@<your-vm-ip>:/path/to/your/iis/deploy/directory
+          scp -r ./publish/* tdsadmin@20.127.226.1:C:\inetpub\wwwroot\code
 
       - name: Restart IIS on Azure VM
         run: |
-          ssh -o StrictHostKeyChecking=no user@<your-vm-ip> << 'EOF'
+          ssh -o StrictHostKeyChecking=no tdsadmin@20.127.226.1 << 'EOF'
             # Restart IIS to apply changes
             iisreset
           EOF
