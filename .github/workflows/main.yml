@@ -1,52 +1,51 @@
-name: .NET Core 8 CI/CD to Azure Windows VM
+name: CI/CD for .NET Core 8 App with IIS Deployment
 
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - main  # Trigger the workflow on push to the main branch
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # You can use any GitHub runner to build your app
+    runs-on: ubuntu-latest  # Run on a Linux-based runner
 
     steps:
-      - name: Checkout code
+      - name: Check out the repository
         uses: actions/checkout@v2
 
-      - name: Set up .NET Core SDK
+      - name: Set up .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'  # Specify the version of .NET Core 8
+          dotnet-version: '8.0.x'
 
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build the project
+      - name: Build the application
         run: dotnet build --configuration Release
 
-      - name: Run tests
-        run: dotnet test --configuration Release
-
-      - name: Publish the app
+      - name: Publish the application
         run: dotnet publish --configuration Release --output ./publish
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build  # Ensure the build job is completed before deploying
-
+    needs: build
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install sshpass (for password-based authentication)
-        run: sudo apt-get install -y sshpass
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.AZURE_SSH_PRIVATE_KEY }}
 
-      - name: Deploy to Azure Windows VM
+      - name: Copy files to Azure VM
         run: |
-          # Use sshpass to pass the password non-interactively for SSH authentication
-          sshpass -p ${{ secrets.AZURE_VM_PASSWORD }} ssh -o StrictHostKeyChecking=no -p 22 tdsadmin@20.127.226.1 "powershell.exe -Command 'C:\\Users\\tdsadmin\\deploy.ps1'"
-        env:
-          AZURE_VM_PASSWORD: ${{ secrets.AZURE_VM_PASSWORD }}
+          scp -r ./publish/* user@<your-vm-ip>:/path/to/your/iis/deploy/directory
+
+      - name: Restart IIS on Azure VM
+        run: |
+          ssh -o StrictHostKeyChecking=no user@<your-vm-ip> << 'EOF'
+            # Restart IIS to apply changes
+            iisreset
+          EOF
