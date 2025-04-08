@@ -42,7 +42,7 @@ jobs:
 
       - name: Copy files to Azure VM
         run: |
-          scp -r ${{ github.workspace }}/artifactdirectory/* tdsadmin@20.127.226.1:C:\inetpub\wwwroot\code
+          scp -r ${{ github.workspace }}/artifactdirectory tdsadmin@20.127.226.1:C:\inetpub\wwwroot\code
 
       - name: Restart IIS on Azure VM
         run: |
