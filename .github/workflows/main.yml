@@ -25,7 +25,8 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Publish the application
-        run: dotnet publish --configuration Release --output ./publish
+        run: dotnet publish --configuration Release --output ${{ github.workspace }}/artifactdirectory
+
 
   deploy:
     runs-on: ubuntu-latest
