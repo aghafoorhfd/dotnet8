@@ -36,5 +36,5 @@ jobs:
     - name: Publish application
       run: |
         dotnet publish --configuration Release --output ./publish
-    - name: Set environment variable
-      run: echo "MY_VAR=some_value" >> $GITHUB_ENV
+    - name: Display the workspace path
+      run: echo "The workspace is located at:$GITHUB_WORKSPACE"
