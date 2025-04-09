@@ -38,3 +38,7 @@ jobs:
         dotnet publish --configuration Release --output ./publish
     - name: Display the workspace path
       run: echo "The workspace is located at:$GITHUB_WORKSPACE"
+    - name: Show contents of the workspace
+      run: |
+          echo "Listing contents of GITHUB_WORKSPACE directory:"
+          dir $env:GITHUB_WORKSPACE
