@@ -63,7 +63,7 @@ jobs:
           Enter-PSSession -ComputerName $remoteComputer -Credential $cred -Authentication Default
 
           # Copy files to the remote machine (adjust paths as needed)
-          Copy-Item -Path "./publish/*" -Destination "C:\path\to\remote\folder" -Recurse -Force
+          Copy-Item -Path "./publish/*" -Destination "C:\inetpub\wwwroot\code\" -Recurse -Force
 
           # Exit the remote session
           Exit-PSSession
