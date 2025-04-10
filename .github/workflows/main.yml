@@ -42,27 +42,41 @@ jobs:
       run: |
           echo "Listing contents of GITHUB_WORKSPACE directory:"
           dir $env:GITHUB_WORKSPACE
-    - name: Set up PowerShell session and copy files
+    - name: Set up WinRM TrustedHosts and copy files
       run: |
+          # Define the remote machine and credentials
           $remoteComputer = "20.127.226.1"
           $username = "${{ secrets.AZURE_VM_USERNAME }}"
           $password = "${{ secrets.AZURE_VM_PASSWORD }}"
           
-          # Create a PSCredential object
+          # Set TrustedHosts (Allow connection from this IP)
+          Set-Item WSMan:\localhost\Client\TrustedHosts -Value $remoteComputer -Force
+
+          # Allow unencrypted traffic (Optional - only for HTTP communication)
+          Set-Item WSMan:\localhost\Client\AllowUnencrypted -Value $true
+
+          # Create a PSCredential object for authentication
           $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
           $cred = New-Object System.Management.Automation.PSCredential($username, $securePassword)
 
-          # Establish a PowerShell remoting session to the remote machine
+          # Establish a PowerShell remoting session (HTTP or HTTPS)
           Enter-PSSession -ComputerName $remoteComputer -Credential $cred -Authentication Default
 
           # Copy files to the remote machine (adjust paths as needed)
-          Copy-Item -Path "./publish/*" -Destination "C:\inetpub\wwwroot\code\" -Recurse -Force
+          Copy-Item -Path "./publish/*" -Destination "C:\path\to\remote\folder" -Recurse -Force
 
-          # Exit the PowerShell remoting session
+          # Exit the remote session
           Exit-PSSession
           env:
           REMOTE_USER: ${{ secrets.AZURE_VM_USERNAME }}
           REMOTE_PASSWORD: ${{ secrets.AZURE_VM_PASSWORD }}
+
+          
+
+
+
+
+
           
 
 
