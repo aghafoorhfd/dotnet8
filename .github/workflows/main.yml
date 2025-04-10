@@ -45,7 +45,7 @@ jobs:
     - name: Copy files via SMB
       run: |
           net use \\$env:AZURE_VM_IP\test /user:$env:AZURE_VM_USERNAME $env:AZURE_VM_PASSWORD
-          copy /Y .\publish\* \\$env:AZURE_VM_IP\test\
+          copy /Y .\publish\* \\$env:AZURE_VM_IP\\test\
       env:
           REMOTE_IP: ${{ secrets.AZURE_VM_IP }}
           USER: ${{ secrets.AZURE_VM_USERNAME }}
