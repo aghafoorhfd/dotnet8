@@ -42,14 +42,27 @@ jobs:
       run: |
           echo "Listing contents of GITHUB_WORKSPACE directory:"
           dir $env:GITHUB_WORKSPACE
-    - name: Copy files via SMB
+    - name: Set up PowerShell session and copy files
       run: |
-          net use \\$env:AZURE_VM_IP\test /user:$env:AZURE_VM_USERNAME $env:AZURE_VM_PASSWORD
-          copy /Y .\publish\* \\$env:AZURE_VM_IP\\test\
-      env:
-          REMOTE_IP: ${{ secrets.AZURE_VM_IP }}
-          USER: ${{ secrets.AZURE_VM_USERNAME }}
-          PASSWORD: ${{ secrets.AZURE_VM_PASSWORD }}
+          $remoteComputer = "20.127.226.1"
+          $username = "${{ secrets.AZURE_VM_USERNAME }}"
+          $password = "${{ secrets.AZURE_VM_PASSWORD }}"
+          
+          # Create a PSCredential object
+          $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
+          $cred = New-Object System.Management.Automation.PSCredential($username, $securePassword)
+
+          # Establish a PowerShell remoting session to the remote machine
+          Enter-PSSession -ComputerName $remoteComputer -Credential $cred -Authentication Default
+
+          # Copy files to the remote machine (adjust paths as needed)
+          Copy-Item -Path "./publish/*" -Destination "C:\inetpub\wwwroot\code\" -Recurse -Force
+
+          # Exit the PowerShell remoting session
+          Exit-PSSession
+          env:
+          REMOTE_USER: ${{ secrets.AZURE_VM_USERNAME }}
+          REMOTE_PASSWORD: ${{ secrets.AZURE_VM_PASSWORD }}
           
 
 
