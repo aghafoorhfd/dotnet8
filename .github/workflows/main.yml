@@ -42,15 +42,12 @@ jobs:
       run: |
           echo "Listing contents of GITHUB_WORKSPACE directory:"
           dir $env:GITHUB_WORKSPACE
-    - name: Upload files via SFTP
-      uses: appleboy/ssh-action@v0.1.1
+    - name: Copy files with PowerShell Remoting
+      uses: azure/powershell-action@v1
       with:
-          host: ${{ secrets.AZURE_VM_IP }}
-          username: ${{ secrets.AZURE_VM_USERNAME }}
-          password: ${{ secrets.AZURE_VM_PASSWORD }}
-          port: 22
-          source: "./publish/*"
-          target: "C:/inetpub/wwwroot/code/"
+           pwsh: true
+           script: |
+            Copy-Item -Path './publish/*' -Destination 'C:\inetpub\wwwroot\code\' -Recurse -Force
           
 
 
