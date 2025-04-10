@@ -42,3 +42,18 @@ jobs:
       run: |
           echo "Listing contents of GITHUB_WORKSPACE directory:"
           dir $env:GITHUB_WORKSPACE
+    - name: Deploy to Windows VM via WinRM
+      uses: evilfactory/WinRM-Deploy@v2
+      with:
+         host: ${{ secrets.AZURE_VM_IP }}
+         username: ${{ secrets.AZURE_VM_USERNAME }}
+         password: ${{ secrets.AZURE_VM_PASSWORD }}
+         script: |
+           Stop-Service -Name 'MyAppService'
+           Remove-Item -Recurse -Force C:\inetpub\wwwroot\code\*
+           Copy-Item -Recurse ./publish/* C:\inetpub\wwwroot\code\
+           Start-Service -Name 'MyAppService'
+
+
+
+          
