@@ -42,15 +42,15 @@ jobs:
       run: |
           echo "Listing contents of GITHUB_WORKSPACE directory:"
           dir $env:GITHUB_WORKSPACE
-    - name: Deploy to Windows VM via WinRM
-      uses: evilfactory/WinRM-Deploy@v2
+    - name: Upload files via SFTP
+      uses: appleboy/ssh-action@v0.1.1
       with:
-         host: ${{ secrets.AZURE_VM_IP }}
-         username: ${{ secrets.AZURE_VM_USERNAME }}
-         password: ${{ secrets.AZURE_VM_PASSWORD }}
-         script: |
-           Remove-Item -Recurse -Force C:\inetpub\wwwroot\code\*
-           Copy-Item -Recurse ./publish/* C:\inetpub\wwwroot\code\
+          host: ${{ secrets.AZURE_VM_IP }}
+          username: ${{ secrets.AZURE_VM_USERNAME }}
+          password: ${{ secrets.AZURE_VM_PASSWORD }}
+          port: 22
+          source: "./publish/*"
+          target: "C:/inetpub/wwwroot/code/"
           
 
 
