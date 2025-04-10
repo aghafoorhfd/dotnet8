@@ -42,12 +42,14 @@ jobs:
       run: |
           echo "Listing contents of GITHUB_WORKSPACE directory:"
           dir $env:GITHUB_WORKSPACE
-    - name: Copy files with PowerShell Remoting
-      uses: azure/powershell-action@v1
-      with:
-           pwsh: true
-           script: |
-            Copy-Item -Path './publish/*' -Destination 'C:\inetpub\wwwroot\code\' -Recurse -Force
+    - name: Copy files via SMB
+      run: |
+          net use \\$env:AZURE_VM_IP\test /user:$env:AZURE_VM_USERNAME $env:AZURE_VM_PASSWORD
+          copy /Y .\publish\\* \\$env:AZURE_VM_IP\test\
+      env:
+          REMOTE_IP: ${{ secrets.AZURE_VM_IP }}
+          USER: ${{ secrets.AZURE_VM_USERNAME }}
+          PASSWORD: ${{ secrets.AZURE_VM_PASSWORD }}
           
 
 
