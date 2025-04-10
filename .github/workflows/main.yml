@@ -46,7 +46,7 @@ jobs:
       run: |
           # Define the remote machine and credentials
           $remoteComputer = "20.127.226.1"
-          $username = "${{ secrets.AZURE_VM_USERNAME }}"
+          $username = "20.127.226.1\${{ secrets.AZURE_VM_USERNAME }}"
           $password = "${{ secrets.AZURE_VM_PASSWORD }}"
           
           # Set TrustedHosts (Allow connection from this IP)
