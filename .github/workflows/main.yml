@@ -51,6 +51,6 @@ jobs:
            key: ${{ secrets.AZURE_SSH_PRIVATE_KEY }}
            port: 22
            script: |
+            echo "OK"
              
-             # Copy new published files to the app directory
-             scp -r $GITHUB_WORKSPACE/* tdsadmin@20.106.173.30:/tmp/test
+
