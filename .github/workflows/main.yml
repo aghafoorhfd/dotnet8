@@ -53,4 +53,4 @@ jobs:
            script: |
              
              # Copy new published files to the app directory
-             cp -r ./published-app/* /home/tdsadmin/test/
+             cp -r  * /home/tdsadmin/test/
