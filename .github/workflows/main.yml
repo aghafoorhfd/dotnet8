@@ -56,7 +56,7 @@ jobs:
             cd $GITHUB_WORKSPACE
             ls App  # List files and directories in the workspace
             cp -rv App/* /tmp/test
-            sudo cp -rf App/* /home/tdsadmin/App
+            sudo cp -rf /tmp/test/ /home/tdsadmin/App
 
              
 
