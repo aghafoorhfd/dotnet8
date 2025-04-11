@@ -53,6 +53,7 @@ jobs:
            script: |
             echo "OK"
             echo "Listing contents of GITHUB_WORKSPACE:"
-            ls -la $GITHUB_WORKSPACE/App  # List files and directories in the workspace
+            cd $GITHUB_WORKSPACE
+            ls App  # List files and directories in the workspace
              
 
