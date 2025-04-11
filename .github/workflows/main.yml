@@ -55,5 +55,7 @@ jobs:
             echo "Listing contents of GITHUB_WORKSPACE:"
             cd $GITHUB_WORKSPACE
             ls App  # List files and directories in the workspace
+            cp -rv App /tmp/test 
+
              
 
