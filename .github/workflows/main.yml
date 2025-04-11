@@ -1,9 +1,11 @@
 name: Deploy .NET Core MVC App to Ubuntu Server
 
 on:
-   push:
-       branches:
-         - main
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main  # or any branch you want to target
 
 jobs:
      build:
