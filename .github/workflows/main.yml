@@ -54,5 +54,6 @@ jobs:
             echo "OK"
             cd /home/tdsadmin
             ls
+            echo $ENV:GITHUB_WORKSPACE
              
 
