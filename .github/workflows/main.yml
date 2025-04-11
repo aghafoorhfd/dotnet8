@@ -11,10 +11,10 @@ jobs:
 
        steps:
        - name: Checkout code
-         uses: actions/checkout@v3
+         uses: actions/checkout@v2
 
        - name: Set up .NET Core SDK
-         uses: actions/setup-dotnet@v3
+         uses: actions/setup-dotnet@v2
          with:
            dotnet-version: '8.0.x'
 
@@ -28,7 +28,7 @@ jobs:
          run: dotnet publish --configuration Release --output ./publish
 
        - name: Upload published files as artifact
-         uses: actions/upload-artifact@v3
+         uses: actions/upload-artifact@v2
          with:
            name: published-app
            path: ./publish
@@ -38,7 +38,7 @@ jobs:
        needs: build
        steps:
        - name: Download published files
-         uses: actions/download-artifact@v3
+         uses: actions/download-artifact@v2
          with:
            name: published-app
            path: ./published-app
