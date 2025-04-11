@@ -53,4 +53,4 @@ jobs:
            script: |
              
              # Copy new published files to the app directory
-             scp -r $GITHUB_WORKSPACE/* tdsadmin@20.106.173.30:/home/tdsadmin/test/
+             scp -r $GITHUB_WORKSPACE/* username@host:/tmp/test
